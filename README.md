@@ -15,6 +15,7 @@ This image is a fork of xcsrz/just-tinydns, which did what it says on the tin: j
 ### Basic Usage:
 
 ```docker run -v `pwd`/test.dns:/srv/dns/root/data -p 53:53/tcp -p 53:53/udp -e service=tinydns budney/djbdns```
+
 ```docker run -p 53:53/tcp -p 53:53/udp -e service=dnscache budney/djbdns```
 
 ### Docker Compose:
