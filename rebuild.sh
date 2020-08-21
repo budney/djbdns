@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cd /srv/dns/root && make
+cd /srv/tinydns/root && exec /usr/local/bin/tinydns-data
