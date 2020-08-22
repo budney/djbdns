@@ -1,0 +1,26 @@
+# This dockerfile sets up a DNS server that nobody can reach,
+# and a DNS cache that both talks to it and answers general
+# DNS queries. This is useful behind a firewall, where you
+# need to lookup internal hosts but have no need to issue
+# authoritative responses to other people's queries.
+
+version: "3"
+services:
+  tinydns:
+    image: budney/djbdns
+    restart: unless-stopped
+    environment:
+      service: tinydns
+    volumes:
+      - /etc/djbdns/data:/srv/tinydns/root/data
+  dnscache:
+    image: budney/djbdns
+    restart: unless-stopped
+    environment:
+      service: dnscache
+      delegate: lan.example.com:1.168.192.in-addr.arpa
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+    links:
+      - tinydns

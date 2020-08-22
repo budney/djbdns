@@ -1,0 +1,43 @@
+# This dockerfile sets up a split-horizon DNS: one server
+# answers internal queries, while a second server accepts
+# queries from the outside world. A cache is also run,
+# that consults the internal DNS when asked about the
+# split domain.
+#
+# You'll need two IP addresses: one exposed to the outside
+# world for authoritative DNS queries; and one exposed to
+# the internal network for general DNS queries (including
+# but not limited to your split domain). Modify the ports
+# sections with the correct IPs. Note: THEY CANNOT BE THE
+# SAME IP.
+
+version: "3"
+services:
+  tinydns_out:
+    image: budney/djbdns
+    restart: unless-stopped
+    environment:
+      service: tinydns
+    volumes:
+      - /etc/djbdns/data.external:/srv/tinydns/root/data
+    ports:
+      - 192.168.1.3:53:53/tcp
+      - 192.168.1.3:53:53/udp
+  tinydns_in:
+    image: budney/djbdns
+    restart: unless-stopped
+    environment:
+      service: tinydns
+    volumes:
+      - /etc/djbdns/data.internal:/srv/tinydns/root/data
+  dnscache:
+    image: budney/djbdns
+    restart: unless-stopped
+    environment:
+      service: dnscache
+      delegate: example.com:1.168.192.in-addr.arpa:2.168.192.in-addr.arpa
+    ports:
+      - 192.168.1.4:53:53/tcp
+      - 192.168.1.4:53:53/udp
+    links:
+      - tinydns_in

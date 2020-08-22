@@ -1,0 +1,17 @@
+# This dockerfile sets up a DNS cache that forwards all
+# requests to an upstream server, like your ISP's. If
+# you have a shaky connection or low bandwidth, this
+# minimizes traffic over that link, and caches the
+# responses to lower it still further.
+
+version: "3"
+services:
+  dnscache:
+    image: budney/djbdns
+    restart: unless-stopped
+    environment:
+      service: dnscache
+      forwardto: 8.8.8.8
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
