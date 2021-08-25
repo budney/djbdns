@@ -1,6 +1,6 @@
 # Create a build image to compile djbdns. We'll copy the binaries to a final
 # image, to keep the size down.
-FROM golang:alpine as build
+FROM alpine as build
 
 USER root
 
@@ -19,7 +19,7 @@ RUN mkdir /src ; cd /src ; \
 #
 #===============================================================================
 #
-FROM golang:alpine
+FROM alpine
 LABEL maintainer="Len Budney (len.budney@gmail.com)"
 
 COPY --from=build /etc/dnsroots.global /etc/
