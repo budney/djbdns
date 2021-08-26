@@ -14,7 +14,7 @@ case "$SERVICE" in
 
         # Options 1 & 2 are identical in this setup: a
         # cache that accepts queries over the network.
-        NET=$( netstat -rn | egrep UG | awk '{print $2}' | cut -f1 -d. )
+        NET=$( ip r | egrep default | awk '{print $3}' | cut -f1 -d. )
         touch "/srv/$SERVICE/root/ip/$NET"
 
         # Options 3 & 4 are identical in this setup: a
