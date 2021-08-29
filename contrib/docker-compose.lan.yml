@@ -10,15 +10,16 @@ services:
     image: budney/djbdns
     restart: unless-stopped
     environment:
-      service: tinydns
+      SERVICE: tinydns
     volumes:
       - /etc/djbdns/data:/srv/tinydns/root/data
   dnscache:
     image: budney/djbdns
     restart: unless-stopped
     environment:
-      service: dnscache
-      delegate: lan.example.com:1.168.192.in-addr.arpa
+      SERVICE: dnscache
+      DELEGATE: lan.example.com:1.168.192.in-addr.arpa
+      DNSNAME: tinydns
     ports:
       - 53:53/tcp
       - 53:53/udp

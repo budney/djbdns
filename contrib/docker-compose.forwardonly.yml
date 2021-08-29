@@ -10,8 +10,8 @@ services:
     image: budney/djbdns
     restart: unless-stopped
     environment:
-      service: dnscache
-      forwardto: 8.8.8.8
+      SERVICE: dnscache
+      FORWARDTO: 8.8.8.8
     ports:
       - 53:53/tcp
       - 53:53/udp

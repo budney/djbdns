@@ -1,5 +1,6 @@
 #!/bin/sh
-SERVICE="$1"
+
+DNSNAME=${DNSNAME:-tinydns}
 
 case "$SERVICE" in
     tinydns)
@@ -20,22 +21,22 @@ case "$SERVICE" in
         # Options 3 & 4 are identical in this setup: a
         # forward-only cache that accepts queries over
         # the network.
-        if [ -n "$forwardto" ]; then
+        if [ -n "$FORWARDTO" ]; then
             echo 1 > "/srv/$SERVICE/env/FORWARDONLY"
-            echo "$forwardto" > "/srv/$SERVICE/root/servers/@"
+            echo "$FORWARDTO" > "/srv/$SERVICE/root/servers/@"
         fi
 
         # Delegate the specified domains, if any, to
         # tinydns for resolution.
-        if [ -n "$delegate" ]; then
-            for DOMAIN in $( echo "$delegate" | tr : ' ' ); do
-                dnsip tinydns > "/srv/$SERVICE/root/servers/$DOMAIN"
+        if [ -n "$DELEGATE" ]; then
+            for DOMAIN in $( echo "$DELEGATE" | tr : ' ' ); do
+                dnsip "$DNSNAME" > "/srv/$SERVICE/root/servers/$DOMAIN"
             done
         fi
         ;;
 
     *)
-        echo "Usage: /start.sh [ tinydns | dnscache ]"
+        echo "Fatal: SERVICE environment variable must be 'dnscache' or 'tinydns'" 1>&2
         exit 1
         ;;
 esac

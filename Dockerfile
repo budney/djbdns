@@ -35,4 +35,4 @@ COPY start.sh rebuild.sh /
 COPY test.dns /srv/tinydns/root/data
 COPY resolv.conf /etc/resolv.conf
 
-CMD ["sh", "-c", "/start.sh ${service}"]
+CMD ["/start.sh"]
