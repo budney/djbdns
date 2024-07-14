@@ -41,9 +41,9 @@ jobs:
         echo "current_digest=$CURRENT_DIGEST" >> $GITHUB_ENV
         echo "remote_digest=$REMOTE_DIGEST" >> $GITHUB_ENV
         if [ "$CURRENT_DIGEST" != "$REMOTE_DIGEST" ]; then
-          echo "::set-output name=update_needed::true"
+          echo "update_needed=true" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=update_needed::false"
+          echo "update_needed=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Install and run make
