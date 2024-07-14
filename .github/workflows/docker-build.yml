@@ -40,12 +40,6 @@ jobs:
           echo "::set-output name=update_needed::false"
         fi
 
-    - name: Build and push Docker image
-      if: steps.check_image.outputs.update_needed == 'true'
-      run: |
-        docker build -t your-docker-image:latest .
-        docker push your-docker-image:latest
-
     - name: Install and run make
       if: steps.check_image.outputs.update_needed == 'true'
       run: |
