@@ -19,6 +19,7 @@ jobs:
 
     env:
       BASE_IMAGE: alpine:latest
+      LOGNAME: ${{ github.actor }}
 
     steps:
     - name: Checkout repository
