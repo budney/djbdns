@@ -7,7 +7,7 @@ SOURCE_IMAGE="alpine:latest"
 # use the current date.
 GIT_TAGS=$(git tag --contains HEAD)
 if test "${GIT_TAGS}" = ""; then
-    GIT_TAGS=$(date +%Y%M%d)
+    GIT_TAGS=$(date +%Y%m%d)
 fi
 
 # Pull the source image
