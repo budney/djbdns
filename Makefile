@@ -14,7 +14,7 @@ clean: prune
 distclean: clean delete
 
 all: builder
-	docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 $(TAG_OPTS) .
+	docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $(LOGNAME)/$(BASENAME):latest $(TAG_OPTS) .
 
 builder:
 	docker buildx create --use --name=$(BUILDNAME)
