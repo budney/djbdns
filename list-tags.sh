@@ -16,4 +16,7 @@ REPO=$(echo ${SOURCE_IMAGE} | cut -d':' -f1)
 # Find all tags associated with the digest
 TAGS=$(curl -s "https://hub.docker.com/v2/repositories/library/${REPO}/tags/?page_size=100" | jq -r ".results[] | select(.digest==\"${DIGEST}\") | .name ")
 
+# Filter out the special tag "latest"
+TAGS=$(for t in ${TAGS}; do echo ${t}; done|egrep -v latest)
+
 echo ${TAGS}
