@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs daily at midnight
   workflow_dispatch: # Allows manual triggering
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build-and-push:
@@ -47,7 +53,10 @@ jobs:
         fi
 
     - name: Install and run make
-      if: steps.check_image.outputs.update_needed == 'true'
+      if: |
+        steps.check_image.outputs.update_needed == 'true' ||
+        github.event_name == 'push' ||
+        github.event_name == 'pull_request'
       run: |
         sudo apt-get update && sudo apt-get install -y make
         make all
