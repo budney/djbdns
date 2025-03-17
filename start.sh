@@ -25,7 +25,7 @@ case "$SERVICE" in
             NETWORKS="$@"
 
             for NETWORK in $NETWORKS; do
-                touch "/srv/$SERVICE/root/ip/$NETWORK
+                touch "/srv/$SERVICE/root/ip/$NETWORK"
             done
         fi
 

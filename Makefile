@@ -3,7 +3,8 @@ BUILDNAME=$(BASENAME)-buildx
 TAGS=$(shell ./list-tags.sh)
 
 # PLATFORM can be overridden by the invoker
-PLATFORMS ?= linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6,linux/amd64/v2,linux/riscv64
+PLATFORMS ?= linux/386,linux/amd64,linux/amd64/v2,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x
+
 
 define TAG_OPTS
 $(shell for tag in $(TAGS); do echo --tag $(LOGNAME)/$(BASENAME):$$tag; done)
