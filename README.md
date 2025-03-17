@@ -4,7 +4,9 @@ This is a docker image to run a djbdns DNS server for publishing public DNS reco
 
 This image is a fork of xcsrz/just-tinydns, which did what it says on the tin: just run tinydns. In addition to adding support for dnscache, this image is optimized for small size: the arm image on a Raspberry Pi is under 5MB, versus almost 150MB for the original image, which was mostly taken up with build tools.
 
-#### Notes:
+This version of djbdns has most of the Debian patches applied to it, because djbdns hasn't had any updates in about 20 years, and specifically it will no longer compile correctly on 64-bit systems. The patches enable it to build, and mitigate some risks of cache poisoning or failed lookups under edge conditions.
+
+#### Notes
 
 * The `tinydns` service directory is `/srv/tinydns`
 * You (probably) want to mount your data file from your host to `/srv/tinydns/root/data`
@@ -12,13 +14,13 @@ This image is a fork of xcsrz/just-tinydns, which did what it says on the tin: j
 * If you update your DNS data on the host, you can execute `/rebuild.sh` on the container to make the changes take effect:
 `docker exec [ CONTAINER NAME OR ID ] /rebuild.sh`
 
-### Basic Usage:
+### Basic Usage
 
 ```docker run -v `pwd`/test.dns:/srv/dns/root/data -p 53:53/tcp -p 53:53/udp -e service=tinydns budney/djbdns```
 
 ```docker run -p 53:53/tcp -p 53:53/udp -e service=dnscache budney/djbdns```
 
-### Docker Compose:
+### Using Docker Compose
 
 ```
 version: "3"

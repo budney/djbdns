@@ -1,0 +1,87 @@
+Description: Include some standard header files for function prototypes
+Bug-Debian: https://bugs.debian.org/1066632
+Author: Helmut Grohne <helmut@subdivi.de>
+Forwarded: no
+Last-Update: 2024-07-03
+
+--- djbdns-1.05.orig/seek_set.c
++++ djbdns-1.05/seek_set.c
+@@ -1,4 +1,5 @@
+ #include <sys/types.h>
++#include <unistd.h>
+ #include "seek.h"
+ 
+ #define SET 0 /* sigh */
+--- djbdns-1.05.orig/chkshsgr.c
++++ djbdns-1.05/chkshsgr.c
+@@ -1,3 +1,5 @@
++#include <grp.h>
++#include <unistd.h>
+ #include "exit.h"
+ 
+ int main()
+--- djbdns-1.05.orig/hier.c
++++ djbdns-1.05/hier.c
+@@ -1,5 +1,9 @@
+ #include "auto_home.h"
+ 
++void h(const char *home, int uid, int gid, int mode);
++void d(char *home, char *subdir, int uid, int gid, int mode);
++void c(const char *home, const char *subdir, char *file, int uid, int gid, int mode);
++
+ void hier()
+ {
+ /*
+--- djbdns-1.05.orig/install.c
++++ djbdns-1.05/install.c
+@@ -14,7 +14,7 @@
+ int fdsourcedir = -1;
+ 
+ void h(home,uid,gid,mode)
+-char *home;
++const char *home;
+ int uid;
+ int gid;
+ int mode;
+@@ -52,8 +52,8 @@
+ buffer ssout;
+ 
+ void c(home,subdir,file,uid,gid,mode)
+-char *home;
+-char *subdir;
++const char *home;
++const char *subdir;
+ char *file;
+ int uid;
+ int gid;
+--- djbdns-1.05.orig/utime.c
++++ djbdns-1.05/utime.c
+@@ -1,5 +1,6 @@
+ #include <sys/types.h>
+ #include <sys/time.h>
++#include <utime.h>
+ #include "scan.h"
+ #include "exit.h"
+ 
+--- djbdns-1.05.orig/dnsq.c
++++ djbdns-1.05/dnsq.c
+@@ -1,3 +1,4 @@
++#include <unistd.h>
+ #include "uint16.h"
+ #include "strerr.h"
+ #include "buffer.h"
+--- djbdns-1.05.orig/dnsqr.c
++++ djbdns-1.05/dnsqr.c
+@@ -1,3 +1,4 @@
++#include <unistd.h>
+ #include "uint16.h"
+ #include "strerr.h"
+ #include "buffer.h"
+--- djbdns-1.05.orig/prot.c
++++ djbdns-1.05/prot.c
+@@ -1,3 +1,5 @@
++#include <grp.h>
++#include <unistd.h>
+ #include "hasshsgr.h"
+ #include "prot.h"
+ 

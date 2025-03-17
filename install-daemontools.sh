@@ -16,4 +16,5 @@ rm -f daemontools-${VERSION}.tar.gz
 # Build daemontools
 cd admin/daemontools-${VERSION}
 sed -i 's}^\(gcc.*\)$}\1 -include /usr/include/errno.h}' src/conf-[cl][cd]
+patch -p1 < /tmp/daemontools.patch
 ./package/install

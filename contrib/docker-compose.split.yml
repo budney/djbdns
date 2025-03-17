@@ -36,6 +36,9 @@ services:
     environment:
       SERVICE: dnscache
       DELEGATE: example.com:1.168.192.in-addr.arpa:2.168.192.in-addr.arpa
+      # If this isn't set, then we will respond to
+      # requests from 192.0.0.0/8.
+      ALLOW_NETWORKS: 192.168.1:192.168.2
     ports:
       - 192.168.1.4:53:53/tcp
       - 192.168.1.4:53:53/udp

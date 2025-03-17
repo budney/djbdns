@@ -1,0 +1,35 @@
+Description: query.c: increase recursion depth to 200.
+ The recursion loop for CNAME resolution has an upper limit of 100
+ iterations by default. This has proven too small in some cases where
+ large CDNs are concerned. This commit increases the limit to 200.
+ .
+ The patch was based on the OpenWrt fix, supplied by user ylxu.
+Author: Michael Orlitzky <michael@orlitzky.com>
+Date: Fri, 5 Aug 2016 09:13:11 -0400
+Gentoo-Bug: 590548
+OpenWrt-Bug: 5881
+SMEServer-Bug: 8362
+Last-Update: 2020-07-26
+
+diff --git a/query.c b/query.c
+index 46cdc00..61fe708 100644
+--- a/query.c
++++ b/query.c
+@@ -203,7 +203,7 @@ static int doit(struct query *z,int state)
+ 
+ 
+   NEWNAME:
+-  if (++z->loop == 100) goto DIE;
++  if (++z->loop == 200) goto DIE;
+   d = z->name[z->level];
+   dtype = z->level ? DNS_T_A : z->type;
+   dlen = dns_domain_length(d);
+@@ -449,7 +449,7 @@ static int doit(struct query *z,int state)
+ 
+ 
+   HAVEPACKET:
+-  if (++z->loop == 100) goto DIE;
++  if (++z->loop == 200) goto DIE;
+   buf = z->dt.packet;
+   len = z->dt.packetlen;
+ 

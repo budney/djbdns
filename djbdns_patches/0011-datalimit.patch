@@ -1,0 +1,38 @@
+Description: Raise the axfrdns, dnscache, and tinydns data limit.
+Bug-Debian: https://bugs.debian.org/996807
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2025-03-17
+
+--- a/axfrdns-conf.c
++++ b/axfrdns-conf.c
+@@ -50,7 +50,7 @@
+ 
+   start("run");
+   outs("#!/bin/sh\nexec 2>&1\nexec envdir ./env sh -c '\n  exec envuidgid "); outs(user);
+-  outs(" softlimit -d300000 tcpserver -vDRHl0 -x tcp.cdb -- \"$IP\" 53 ");
++  outs(" softlimit -d700000 tcpserver -vDRHl0 -x tcp.cdb -- \"$IP\" 53 ");
+   outs(auto_home); outs("/sbin/axfrdns\n'\n");
+   finish();
+   perm(0755);
+--- a/dnscache-conf.c
++++ b/dnscache-conf.c
+@@ -118,7 +118,7 @@
+   seed_addtime(); perm(0644);
+   seed_addtime(); start("env/CACHESIZE"); outs("1000000\n"); finish();
+   seed_addtime(); perm(0644);
+-  seed_addtime(); start("env/DATALIMIT"); outs("3000000\n"); finish();
++  seed_addtime(); start("env/DATALIMIT"); outs("7000000\n"); finish();
+   seed_addtime(); perm(0644);
+   seed_addtime(); start("run");
+   outs("#!/bin/sh\nexec 2>&1\nexec <seed\nexec envdir ./env sh -c '\n  exec envuidgid "); outs(user);
+--- a/tinydns-conf.c
++++ b/tinydns-conf.c
+@@ -46,7 +46,7 @@
+ 
+   start("run");
+   outs("#!/bin/sh\nexec 2>&1\nexec envuidgid "); outs(user);
+-  outs(" envdir ./env softlimit -d300000 ");
++  outs(" envdir ./env softlimit -d700000 ");
+   outs(auto_home); outs("/sbin/tinydns\n");
+   finish();
+   perm(0755);

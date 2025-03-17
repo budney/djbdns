@@ -1,0 +1,46 @@
+Description: Fix a uint32/unsigned long confusion
+Forwarded: no
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2024-12-30
+
+--- a/tinydns-data.c
++++ b/tinydns-data.c
+@@ -181,6 +181,13 @@
+   strerr_die4x(111,FATAL,"unable to parse data line ",strnum,why);
+ }
+ 
++static void uint32_unpack_big_ulong(const char s[4], unsigned long *u)
++{
++  uint32 uval;
++  uint32_unpack_big(s, &uval);
++  *u = (unsigned long)uval;
++}
++
+ int main()
+ {
+   int fddata;
+@@ -252,19 +259,19 @@
+ 	if (!dns_domain_fromdot(&d1,f[0].s,f[0].len)) nomem();
+ 
+ 	if (!stralloc_0(&f[3])) nomem();
+-	if (!scan_ulong(f[3].s,&u)) uint32_unpack_big(defaultsoa,&u);
++	if (!scan_ulong(f[3].s,&u)) uint32_unpack_big_ulong(defaultsoa,&u);
+ 	uint32_pack_big(soa,u);
+ 	if (!stralloc_0(&f[4])) nomem();
+-	if (!scan_ulong(f[4].s,&u)) uint32_unpack_big(defaultsoa + 4,&u);
++	if (!scan_ulong(f[4].s,&u)) uint32_unpack_big_ulong(defaultsoa + 4,&u);
+ 	uint32_pack_big(soa + 4,u);
+ 	if (!stralloc_0(&f[5])) nomem();
+-	if (!scan_ulong(f[5].s,&u)) uint32_unpack_big(defaultsoa + 8,&u);
++	if (!scan_ulong(f[5].s,&u)) uint32_unpack_big_ulong(defaultsoa + 8,&u);
+ 	uint32_pack_big(soa + 8,u);
+ 	if (!stralloc_0(&f[6])) nomem();
+-	if (!scan_ulong(f[6].s,&u)) uint32_unpack_big(defaultsoa + 12,&u);
++	if (!scan_ulong(f[6].s,&u)) uint32_unpack_big_ulong(defaultsoa + 12,&u);
+ 	uint32_pack_big(soa + 12,u);
+ 	if (!stralloc_0(&f[7])) nomem();
+-	if (!scan_ulong(f[7].s,&u)) uint32_unpack_big(defaultsoa + 16,&u);
++	if (!scan_ulong(f[7].s,&u)) uint32_unpack_big_ulong(defaultsoa + 16,&u);
+ 	uint32_pack_big(soa + 16,u);
+ 
+ 	if (!stralloc_0(&f[8])) nomem();

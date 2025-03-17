@@ -12,6 +12,9 @@ services:
     environment:
       SERVICE: dnscache
       FORWARDTO: 8.8.8.8
+      # If this isn't set, then we will respond to
+      # requests from 192.0.0.0/8.
+      ALLOW_NETWORKS: 192.168.1:192.168.2
     ports:
       - 53:53/tcp
       - 53:53/udp

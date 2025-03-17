@@ -15,8 +15,19 @@ case "$SERVICE" in
 
         # Options 1 & 2 are identical in this setup: a
         # cache that accepts queries over the network.
-        NET=$( ip r | egrep default | awk '{print $3}' | cut -f1 -d. )
-        touch "/srv/$SERVICE/root/ip/$NET"
+        if [ -z "$ALLOW_NETWORKS" ]; then
+            # At least allow the network we're on
+            NET=$( ip r | egrep default | awk '{print $3}' | cut -f1 -d. )
+            touch "/srv/$SERVICE/root/ip/$NET"
+        else
+            # Accept the specified networks from the environment
+            IFS=':' set -f; set -- $ALLOW_NETWORKS; set +f
+            NETWORKS="$@"
+
+            for NETWORK in $NETWORKS; do
+                touch "/srv/$SERVICE/root/ip/$NETWORK
+            done
+        fi
 
         # Options 3 & 4 are identical in this setup: a
         # forward-only cache that accepts queries over
@@ -29,7 +40,10 @@ case "$SERVICE" in
         # Delegate the specified domains, if any, to
         # tinydns for resolution.
         if [ -n "$DELEGATE" ]; then
-            for DOMAIN in $( echo "$DELEGATE" | tr : ' ' ); do
+            IFS=':' set -f; set -- $DELEGATE; set +f
+            DOMAINS="$@"
+
+            for DOMAIN in $DOMAINS; do
                 dnsip "$DNSNAME" > "/srv/$SERVICE/root/servers/$DOMAIN"
             done
         fi

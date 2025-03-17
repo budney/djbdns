@@ -5,11 +5,12 @@ FROM alpine:latest AS build
 USER root
 
 COPY resolv.conf /etc/resolv.conf
-COPY install-daemontools.sh /tmp/install-daemontools.sh
+COPY install-daemontools.sh daemontools.patch /tmp/
+COPY djbdns_patches /tmp/djbdns_patches
 
 # Make sure we're pulling the latest packages, then update
 RUN sed -i 's}/alpine/[^/]*/}/alpine/latest-stable/}' /etc/apk/repositories && \
-    apk --update add --no-cache make gcc g++ ucspi-tcp6 ca-certificates wget && \
+    apk --update add --no-cache make gcc g++ musl-dev ucspi-tcp6 ca-certificates wget patch && \
     update-ca-certificates && \
     chmod 0755 /tmp/install-daemontools.sh && \
     /tmp/install-daemontools.sh
@@ -17,6 +18,10 @@ RUN sed -i 's}/alpine/[^/]*/}/alpine/latest-stable/}' /etc/apk/repositories && \
 RUN mkdir /src ; cd /src ; \
     wget -O - https://cr.yp.to/djbdns/djbdns-1.05.tar.gz | tar xzf - ; \
     cd djbdns-1.05 ; \
+    ls -lht /tmp; \
+    for f in /tmp/djbdns_patches/*; do \
+        patch -p1 < "$f" ; \
+    done; \
     echo gcc -O2 -include /usr/include/errno.h > conf-cc ; \
     make && make setup check
 

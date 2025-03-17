@@ -1,0 +1,26 @@
+Description: Use struct utimbuf as defined by POSIX
+Forwarded: no
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2024-12-30
+
+--- a/utime.c
++++ b/utime.c
+@@ -8,7 +8,7 @@
+ 
+ char *ustr;
+ unsigned long u;
+-time_t ut[2];
++struct utimbuf ut;
+ 
+ int main(int argc,char **argv)
+ {
+@@ -19,7 +19,7 @@
+   if (!ustr) _exit(100);
+   scan_ulong(ustr,&u);
+ 
+-  ut[0] = ut[1] = u;
+-  if (utime(fn,ut) == -1) _exit(111);
++  ut.actime = ut.modtime = u;
++  if (utime(fn,&ut) == -1) _exit(111);
+   _exit(0);
+ }
